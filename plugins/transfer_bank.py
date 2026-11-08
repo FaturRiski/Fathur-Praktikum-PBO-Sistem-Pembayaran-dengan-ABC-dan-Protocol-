@@ -1,7 +1,9 @@
 from core.base import PaymentMethod
+from core.registry import register_plugin
 from core.utils import buat_id
  
  
+@register_plugin("transfer")
 class TransferBank(PaymentMethod):
     def __init__(self, saldo: float = 0, bank: str = "BCA"):
         super().__init__(f"Transfer {bank}")
