@@ -1,11 +1,11 @@
 from core.base import PaymentMethod, PembayaranGagal
 from core.protocols import Notifier
 from core.utils import rupiah
- 
- 
+
+
 class PaymentProcessor:
     """Memproses checkout tanpa peduli metode bayar dan kanal notifikasi."""
- 
+
     def __init__(self, notifier: Notifier):
         if not isinstance(notifier, Notifier):
             raise TypeError(
@@ -13,7 +13,7 @@ class PaymentProcessor:
             )
         self.notifier = notifier
         self.riwayat: list[tuple[str, str, float]] = []
- 
+
     def checkout(
         self, metode: PaymentMethod, jumlah: float, pelanggan: str
     ) -> bool:
@@ -22,11 +22,13 @@ class PaymentProcessor:
         except PembayaranGagal as err:
             self.notifier.kirim(pelanggan, f"Pembayaran gagal: {err}")
             return False
- 
+
         self.riwayat.append((trx_id, metode.nama, jumlah))
+        biaya = metode.biaya_admin(jumlah)
         self.notifier.kirim(
             pelanggan,
-            f"Pembayaran {rupiah(jumlah)} via {metode.nama} berhasil. "
+            f"Pembayaran {rupiah(jumlah)} + biaya admin {rupiah(biaya)} "
+            f"(total {rupiah(jumlah + biaya)}) via {metode.nama} berhasil. "
             f"ID: {trx_id}",
         )
         return True

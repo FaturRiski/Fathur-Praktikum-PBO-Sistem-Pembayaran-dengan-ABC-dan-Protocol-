@@ -40,3 +40,13 @@ Pertanyaan Analisis (jawab di laporan)
 #Tugas 1: Plugin QRIS
 
 #Tugas 2: TelegramNotifer tanpa pewarisan
+
+Tugas 3: Biaya admin sebagai method abstrak
+1. Tambahkan method abstrak biaya_admin(self, jumlah: float) -> float pada PaymentMethod
+= @abstractmethod
+def biaya_admin(self, jumlah: float) -> float:
+    """Hitung biaya admin untuk jumlah pembayaran."""
+
+2. Jalankan python main.py sebelum mengubah plugin, catat yang terjadi, dan jelaskan mengapa
+= TypeError: Can't instantiate abstract class TransferBank without an implementation
+for abstract method 'biaya_admin'

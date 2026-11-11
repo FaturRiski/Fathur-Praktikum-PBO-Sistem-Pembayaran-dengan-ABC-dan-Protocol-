@@ -10,6 +10,9 @@ class QRIS(PaymentMethod):
     def __init__(self, merchant: str = "Kantin Kampus"):
         super().__init__(f"QRIS {merchant}")
 
+    def biaya_admin(self, jumlah: float) -> float:
+        return jumlah * 0.007
+
     def validasi(self, jumlah: float) -> bool:
         return jumlah <= self.BATAS_TRANSAKSI
 
