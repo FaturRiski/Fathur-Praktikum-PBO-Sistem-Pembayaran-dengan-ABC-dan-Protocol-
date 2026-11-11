@@ -1,3 +1,4 @@
+from typing import Any
 from core.notifiers import ConsoleNotifier
 from core.processor import PaymentProcessor
 from core.registry import buat_metode, daftar_plugin
@@ -12,7 +13,8 @@ def main() -> None:
  
     pemroses = PaymentProcessor(ConsoleNotifier())
  
-    skenario = [
+    skenario: list[tuple[str, dict[str, Any], float]] = [
+        
         ("transfer", {"saldo": 1_000_000, "bank": "BCA"}, 250_000),
         ("ewallet", {"saldo": 100_000}, 150_000),
         ("ewallet", {"saldo": 5_000_000}, 2_500_000),

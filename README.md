@@ -50,3 +50,16 @@ def biaya_admin(self, jumlah: float) -> float:
 2. Jalankan python main.py sebelum mengubah plugin, catat yang terjadi, dan jelaskan mengapa
 = TypeError: Can't instantiate abstract class TransferBank without an implementation
 for abstract method 'biaya_admin'
+
+3. implementasikan biaya_admin() pada tiap plugin: transfer bank tetap Rp2.500, ewallet 1% dari jumlah, QRIS 0,7% dari jumlah
+4. Ubah proses() agar validasi memakai total (jumlah + biaya_admin) dan sertakan biaya admin pada pesan notifikasi keberhasilan.
+
+Tugas 4: Analisis tertulis
+1.	Mengapa PaymentMethod lebih tepat sebagai ABC, dan Notifier lebih tepat sebagai Protocol, pada rancangan ini?
+= PaymentMethod lebih tepat sebagai ABC karena metode pembayaran adalah keluarga kelas yang kita kendalikan sendiri dan berbagi logika. Method proses() di kelas induk menjaga urutan langkah (cek jumlah, validasi, bayar), sehingga tidak ditulis ulang di setiap plugin. ABC juga menegakkan kontrak saat objek dibuat: plugin yang belum lengkap langsung gagal dengan TypeError, seperti terlihat pada Percobaan 1 dan Tugas 3. Notifier lebih tepat sebagai Protocol karena kontraknya kecil (satu method kirim()), tidak ada logika bersama, dan kanal notifikasi bisa berasal dari pustaka pihak ketiga yang tidak dapat kita paksa mewarisi kelas dasar kita. Buktinya, TelegramNotifier diterima tanpa pewarisan.
+2.	Skenario apa yang membuat PaymentMethod lebih cocok dijadikan Protocol? Sebaliknya, kapan Notifier lebih cocok menjadi ABC?
+= PaymentMethod cocok dijadikan Protocol bila metode pembayaran datang dari banyak pihak luar yang tidak mau bergantung pada paket kita dan tidak ada logika bersama yang perlu dibagi, misalnya setiap penyedia sudah punya SDK sendiri yang hanya dibungkus. Sebaliknya, Notifier cocok menjadi ABC bila semua kanal berbagi kode, seperti logika coba-ulang, pembatasan laju, atau pencatatan log pengiriman, atau bila kita ingin kelas yang tidak lengkap ditolak sejak dibuat.
+
+3.	Sebutkan satu risiko memakai Protocol dengan @runtime_checkable dan bagaimana Anda mengurangi risikonya pada proyek ini
+= Risiko @runtime_checkable adalah isinstance() hanya memeriksa keberadaan nama method, bukan tanda tangan atau tipe argumennya. Pada Percobaan 2, WhatsAppNotifier dengan kirim(self) tetap dianggap Notifier, sehingga galat baru muncul saat method dipanggil. Pada proyek ini risikonya dikurangi dengan anotasi tipe lengkap yang diperiksa mypy atau Pyright sebelum program berjalan, ditambah uji otomatis yang memanggil kirim() dengan argumen sebenarnya.
+
