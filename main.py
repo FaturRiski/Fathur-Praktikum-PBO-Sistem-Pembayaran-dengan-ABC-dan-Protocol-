@@ -1,4 +1,4 @@
-from core.notifers import ConsoleNotifier
+from core.notifiers import ConsoleNotifier
 from core.processor import PaymentProcessor
 from core.registry import buat_metode, daftar_plugin
 from core.utils import rupiah
